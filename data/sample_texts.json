@@ -1,4 +1,17 @@
 {
-  "sample_1": "This is a coherent and emotionally balanced sentence.",
-  "sample_2": "Random disconnected text with no clear structure."
+  "sample_1": {
+    "id": "s1",
+    "language": "en",
+    "text": "The informational coherence index allows the integration of symbolic, biological, and temporal data into a single metric of unified cognition."
+  },
+  "sample_2": {
+    "id": "s2",
+    "language": "pt",
+    "text": "O índice de coerência informacional visa quantificar a harmonia entre linguagem, bioatividade e sincronia temporal em sistemas vivos e artificiais."
+  },
+  "sample_3": {
+    "id": "s3",
+    "language": "es",
+    "text": "El índice ICOER representa una métrica avanzada que conecta señales del cuerpo con patrones del lenguaje y del tiempo en una red simbólica viva."
+  }
 }
