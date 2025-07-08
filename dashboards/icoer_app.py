@@ -1,47 +1,37 @@
 import streamlit as st
-import pandas as pd
 import json
 from src.icoer_calc import compute_icoer
 
-st.set_page_config(page_title="ICOER v7.1", layout="centered")
-st.title("🧠 ICOER v7.1 Dashboard")
-st.markdown("Compute and visualize Informational Coherence from symbolic, EEG, and temporal data.")
+st.set_page_config(page_title="ICOER v7.1 App", layout="centered")
+st.title("🧠 ICOER v7.1 — Informational Coherence Index")
 
-# --- File Upload ---
-st.sidebar.header("Upload Inputs")
-text_file = st.sidebar.file_uploader("Upload JSON Text File", type=["json"])
-eeg_file = st.sidebar.file_uploader("Upload EEG CSV File", type=["csv"])
+# Carrega o sample_texts.json
+with open("data/sample_texts.json", "r", encoding="utf-8") as f:
+    samples = json.load(f)
 
-if text_file and eeg_file:
-    # Save temporary files
-    with open("temp_text.json", "wb") as f:
-        f.write(text_file.read())
-    with open("temp_eeg.csv", "wb") as f:
-        f.write(eeg_file.read())
+# Lista de opções de texto
+sample_keys = list(samples.keys())
+selected_key = st.selectbox("📄 Escolha um exemplo de texto:", sample_keys)
+selected_text = samples[selected_key]
 
-    # Compute ICOER
-    result = compute_icoer("temp_text.json", "temp_eeg.csv")
-    S = round(result['S'], 3)
-    B = round(result['B'], 3)
-    T = round(result['T'], 3)
-    H = round(result['H'], 3)
-    ICOER = round(result['ICOER'], 3)
+st.markdown(f"**Texto Selecionado:**\n\n_{selected_text['text']}_")
 
-    # --- Display results ---
-    st.subheader("🔍 Results")
-    st.metric("S (Symbolic Coherence)", S)
-    st.metric("B (Biological Coherence)", B)
-    st.metric("T (Temporal Sync)", T)
-    st.metric("H (Informational Entropy)", H)
-    st.metric("🧮 ICOER", ICOER)
+# Exibir botão para calcular
+if st.button("🔍 Calcular ICOER"):
+    # Simula os caminhos dos arquivos
+    text_path = "data/sample_texts.json"
+    eeg_path = "data/simulated_eeg.csv"
 
-    # --- Bar Chart ---
-    st.subheader("📊 Component Breakdown")
-    df = pd.DataFrame({
-        "Component": ["S", "B", "T", "H", "ICOER"],
-        "Value": [S, B, T, H, ICOER]
-    })
-    st.bar_chart(data=df.set_index("Component"))
+    # Executa o cálculo
+    result = compute_icoer(text_path, eeg_path)
 
-else:
-    st.warning("Upload both a text file (.json) and EEG file (.csv) to begin analysis.")
+    st.success("✅ Cálculo concluído!")
+    st.subheader("📊 Resultados dos Módulos")
+
+    # Visualização dos módulos
+    st.metric("🧠 S — Texto (SLECMA)", f"{result['S']:.3f}")
+    st.metric("🧬 B — Biológico (EEG)", f"{result['B']:.3f}")
+    st.metric("⏱️ T — Temporal", f"{result['T']:.3f}")
+    st.metric("🌀 H — Entropia Informacional", f"{result['H']:.3f}")
+    st.markdown("---")
+    st.metric("🧩 ICOER v7.1", f"{result['ICOER']:.3f}")
