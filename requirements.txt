@@ -1,0 +1,9 @@
+spacy>=3.5.0
+nltk
+numpy
+scipy
+pandas
+matplotlib
+streamlit
+mne
+muselsl
